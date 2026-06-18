@@ -14,7 +14,6 @@ FORMAT_SELECTORS = {
     "image_png": "best",
 }
 
-
 QUALITY_SELECTORS = {
     # Video HD qualities
     "1080p": "bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[height<=1080][ext=mp4]/best[height<=1080]",
