@@ -3,504 +3,564 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AMO Downloader — SInematic Streamer</title>
+<title>SPEC — AMOGENZ Downloader</title>
 <style>
-  /* ── NETFLIX DESIGN SYSTEM INTEGRATION ── */
+  /* ── AMOGENZ DESIGN SYSTEM SPEC v1.0.0 PASTING CORE ── */
+  @font-face {
+    font-family: 'BerlinSansFB';
+    /* Menggunakan jsDelivr sebagai CDN gratis dari GitHub kamu */
+    src: url('https://cdn.jsdelivr.net/gh/amogenz/Amogenz/fonts/BerlinSansFBDemi-Bold.woff2') format('woff2'),
+         url('https://cdn.jsdelivr.net/gh/amogenz/Amogenz/fonts/BerlinSansFBDemi-Bold.woff') format('woff'),
+         url('https://cdn.jsdelivr.net/gh/amogenz/Amogenz/fonts/BerlinSansFB.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
   :root {
-    --netflix-red: #E50914;
-    --red-dark: #831010;
-    --red-muted: #B20710;
-    --bg-black: #141414;
-    --surface: #1F1F1F;
-    --surface-elevated: #2D2D2D;
-    
-    --text-primary: #FFFFFF;
-    --text-secondary: #BCBCBC;
-    --text-muted: #808080;
-    
-    --match-score: #46D369;
-    --badge-new: #54B9C5;
-    --border-input: #8C8C8C;
+    /* === COLORS === */
+    --color-bg-base:          #0A0A0A;
+    --color-bg-surface:       #111111;
+    --color-bg-elevated:      #1A1A1A;
+    --color-bg-overlay:       rgba(0, 0, 0, 0.8);
+
+    --color-border-default:   #2E2E2E;
+    --color-border-subtle:    #1A1A1A;
+    --color-border-strong:    #3A3A3A;
+    --color-border-accent:    #39FF14;
+
+    --color-text-primary:     #FFFFFF;
+    --color-text-secondary:   #AAAAAA;
+    --color-text-muted:       #666666;
+    --color-text-disabled:    #3A3A3A;
+    --color-text-accent:      #39FF14;
+    --color-text-danger:      #FF3B30;
+    --color-text-arabic:      #D4A843;
+
+    --color-action-primary:          #39FF14;
+    --color-action-primary-hover:    #5EFF3D;
+    --color-action-primary-pressed:  #2ACC10;
+    --color-action-primary-disabled: #1A4A0A;
+    --color-action-ghost-hover:      rgba(57, 255, 20, 0.08);
+
+    --color-state-success:    #39FF14;
+    --color-state-warning:    #FFB800;
+    --color-state-danger:     #FF3B30;
+    --color-state-info:       #4DA6FF;
+
+    --color-verified-bg:      #39FF14;
+    --color-verified-text:    #0A0A0A;
+
+    /* === TYPOGRAPHY === */
+    --font-display:   'BerlinSansFB', Impact, Arial Black, sans-serif;
+    --font-body:      'Segoe', 'Inter', system-ui, sans-serif;
+    --font-ui:        'Inter', 'Segoe UI', Helvetica Neue, sans-serif;
+    --font-mono:      'JetBrains Mono', Consolas, monospace;
+
+    --type-display-2xl: clamp(3rem, 8vw, 5rem);
+    --type-display-xl:  clamp(2.25rem, 6vw, 3.75rem);
+    --type-display-lg:  clamp(1.875rem, 5vw, 3rem);
+    --type-display-md:  clamp(1.5rem, 4vw, 2.25rem);
+    --type-display-sm:  1.875rem;
+    --type-heading-xl:  1.5rem;
+    --type-heading-lg:  1.25rem;
+    --type-heading-md:  1.125rem;
+    --type-body-lg:     1.125rem;
+    --type-body-md:     1rem;
+    --type-body-sm:     0.875rem;
+    --type-label-lg:    0.875rem;
+    --type-label-md:    0.8125rem;
+    --type-label-sm:    0.75rem;
+    --type-caption:     0.75rem;
+
+    /* === RADIUS === */
+    --radius-none:   0px;
+    --radius-xs:     2px;
+    --radius-sm:     4px;
+    --radius-md:     8px;
+    --radius-lg:     12px;
+    --radius-full:   9999px;
+
+    /* === SHADOWS (NEON GLOW) === */
+    --shadow-neon-sm:    0 0 8px  rgba(57, 255, 20, 0.3);
+    --shadow-neon-md:    0 0 16px rgba(57, 255, 20, 0.4);
+    --shadow-neon-lg:    0 0 32px rgba(57, 255, 20, 0.5);
+    --shadow-neon-xl:    0 0 48px rgba(57, 255, 20, 0.6);
+    --shadow-surface:    0 1px 3px rgba(0, 0, 0, 0.6);
+    --shadow-elevated:   0 4px 16px rgba(0, 0, 0, 0.8);
   }
 
   * { 
     margin: 0; padding: 0; box-sizing: border-box;
-    font-family: "Arial", "Helvetica", sans-serif; /* Netflix Sans system fallback */
-    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0;
   }
 
   body {
-    background-color: var(--bg-black);
-    color: var(--text-primary);
-    font-size: 16px;
-    line-height: 1.5;
-    padding-bottom: 64px;
+    background-color: var(--color-bg-base);
+    color: var(--color-text-secondary);
+    font-family: var(--font-body);
+    font-size: var(--type-body-md);
+    line-height: 1.6;
+    overflow-x: hidden;
   }
 
-  /* Transparent to Solid Netflix Top Nav */
+  /* Sticky Top Nav with Responsive Scaling */
   nav {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    height: 64px;
-    background: linear-gradient(to bottom, rgba(20,20,20,0.95), rgba(20,20,20,0));
+    position: sticky; top: 0;
+    height: 56px;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border-subtle);
     z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background 0.3s;
-  }
-  nav.scrolled {
-    background: var(--bg-black);
+    display: flex; justify-content: center; align-items: center;
   }
 
   .nav-container {
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 32px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%; max-width: 1200px;
+    padding: 0 16px;
+    display: flex; justify-content: space-between; align-items: center;
   }
 
-  .nav-tabs {
-    display: flex;
-    gap: 24px;
+  .brand-logo-txt {
+    font-family: var(--font-display);
+    font-size: var(--type-display-sm);
+    color: var(--color-text-accent);
   }
+
+  .nav-tabs { display: flex; gap: 4px; }
 
   .nav-link {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.2s;
+    background: transparent; border: none;
+    color: var(--color-text-secondary);
+    font-family: var(--font-ui);
+    font-size: var(--type-label-sm);
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+    cursor: pointer; padding: 6px 10px;
+    transition: color 150ms ease;
   }
-  .nav-link:hover { color: var(--text-muted); }
-  .nav-link.active { color: var(--text-primary); font-weight: 700; }
+  @media(min-width: 400px) {
+    .nav-link { font-size: var(--type-label-md); padding: 8px 12px; }
+  }
+  .nav-link:hover { color: var(--color-text-accent); }
+  .nav-link.active {
+    color: var(--color-text-accent);
+    border-bottom: 2px solid var(--color-action-primary);
+  }
 
-  /* Row & Container Layout */
-  .main-container {
-    max-width: 1100px;
+  /* Grid Area Fluid responsive bray */
+  .layout-wrapper {
+    width: 100%;
+    max-width: 1200px; 
     margin: 0 auto;
-    padding: 32px 16px;
+    padding: 40px 16px;
+  }
+  @media(min-width: 768px) {
+    .layout-wrapper { padding: 40px 24px; }
   }
 
   header {
-    padding: 48px 0;
-    text-align: left;
-    position: relative;
-    margin-bottom: 24px;
+    text-align: center; margin-bottom: 32px;
   }
 
-  h1 {
-    font-size: clamp(28px, 6vw, 52px);
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+  /* Visitor Counter Responsive Panel */
+  .visitor-counter-panel {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border-default);
+    padding: 6px 14px; border-radius: var(--radius-full);
     margin-bottom: 16px;
   }
+  .live-pulse-dot {
+    width: 8px; height: 8px;
+    background: var(--color-action-primary);
+    border-radius: 50%;
+    animation: pulse-neon 2s infinite;
+  }
+  @keyframes pulse-neon {
+    0%, 100% { box-shadow: 0 0 4px #39FF14; opacity: 1; }
+    50% { box-shadow: 0 0 12px #39FF14; opacity: 0.6; }
+  }
+  .visitor-text {
+    font-family: var(--font-ui); font-size: var(--type-caption);
+    color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em;
+  }
 
-  .subtitle {
-    font-size: 18px;
-    color: var(--text-secondary);
-    max-width: 600px;
+  h1.brand-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 7vw, var(--type-display-xl));
+    color: var(--color-text-primary);
+    line-height: 1.1; margin-bottom: 8px;
+  }
+  h1.brand-hero-title span.neon-glow {
+    color: var(--color-text-accent);
+    animation: neon-flicker 4s infinite;
+  }
+  @keyframes neon-flicker {
+    0%, 100% { text-shadow: 0 0 8px #39FF14; opacity: 1; }
+    92%       { text-shadow: 0 0 8px #39FF14; opacity: 1; }
+    93%       { text-shadow: none; opacity: 0.5; }
+    94%       { text-shadow: 0 0 8px #39FF14; opacity: 1; }
+    96%       { text-shadow: none; opacity: 0.3; }
+    97%       { text-shadow: 0 0 16px #39FF14; opacity: 1; }
+  }
+
+  .subtitle-branding-desc {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
   }
 
   .panel { display: none; }
   .panel.active { display: block; }
 
-  /* Netflix Component Cards System */
-  .netflix-card {
-    background-color: var(--surface);
-    border-radius: 4px;
-    padding: 24px;
+  /* ── Component Cards ── */
+  .amogenz-card {
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+    padding: 16px;
     margin-bottom: 24px;
-    border: none;
+    transition: border-color 250ms ease, box-shadow 250ms ease;
+  }
+  @media(min-width: 480px) {
+    .amogenz-card { padding: 24px; }
+  }
+  .amogenz-card:hover {
+    border-color: var(--color-border-accent);
+    box-shadow: var(--shadow-neon-sm);
   }
 
-  .form-group {
-    margin-bottom: 24px;
+  .form-group-block { margin-bottom: 20px; }
+  
+  .ui-label-spec {
+    font-family: var(--font-ui); font-size: var(--type-label-sm); font-weight: 500;
+    color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 8px; display: block;
   }
 
-  .input-label {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    margin-bottom: 8px;
-    display: block;
-    letter-spacing: 0.02em;
+  /* ── Form Inputs Responsive Stack bray ── */
+  .form-input-row {
+    display: flex; 
+    flex-direction: column;
+    gap: 12px; 
+    align-items: stretch;
   }
-
-  /* Netflix Email Input Style */
-  .input-wrapper {
-    display: flex;
-    background: #333333;
-    border: 1px solid var(--border-input);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: border-color 0.2s;
+  @media(min-width: 576px) {
+    .form-input-row {
+      flex-direction: row;
+      align-items: center;
+    }
   }
-  .input-wrapper:focus-within {
-    border-color: var(--text-primary);
-  }
-
-  .netflix-input {
+  
+  .input-text-amogenz {
     flex: 1;
-    border: none;
+    background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
+    color: var(--color-text-primary);
+    padding: 10px 14px;
+    border-radius: var(--radius-xs);
+    font-family: var(--font-body); font-size: var(--type-body-md);
+    height: 42px; outline: none; min-width: 0;
+    transition: border-color 150ms ease;
+    width: 100%;
+  }
+  .input-text-amogenz::placeholder {
+    color: var(--color-text-muted);
+  }
+  .input-text-amogenz:focus {
+    border-color: var(--color-border-accent);
+    box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.2);
+  }
+
+  /* ── Button Architectures ── */
+  .btn-primary-amogenz {
+    background-color: var(--color-action-primary);
+    color: var(--color-bg-base);
+    font-family: var(--font-display); font-weight: 700; font-size: var(--type-label-lg);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 10px 24px; border-radius: var(--radius-sm); border: none;
+    height: 42px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background 150ms ease, box-shadow 150ms ease;
+    outline: none;
+    width: 100%;
+  }
+  .btn-primary-amogenz:hover {
+    background: #5EFF3D; box-shadow: var(--shadow-neon-sm);
+  }
+  .btn-primary-amogenz:active {
+    background: #2ACC10;
+  }
+  .btn-primary-amogenz:disabled {
+    background: var(--color-action-primary-disabled); color: var(--color-text-disabled);
+    cursor: not-allowed; box-shadow: none;
+  }
+
+  .btn-ghost-amogenz {
     background: transparent;
-    padding: 12px 16px;
-    font-size: 16px;
-    color: var(--text-primary);
+    color: var(--color-text-accent);
+    border: 1px solid var(--color-border-accent);
+    font-family: var(--font-display); font-weight: 600; font-size: var(--type-label-sm);
+    padding: 8px 16px; border-radius: var(--radius-sm); height: 42px; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    width: 100%;
+    transition: background 150ms ease, box-shadow 150ms ease;
+  }
+  @media(min-width: 576px) {
+    .btn-ghost-amogenz { width: auto; }
+  }
+  .btn-ghost-amogenz:hover {
+    background: rgba(57,255,20,0.08); box-shadow: var(--shadow-neon-sm);
+  }
+
+  .full-width-element { width: 100%; margin-top: 12px; }
+
+  .amogenz-danger-alert-box {
+    display: none; background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-text-danger); border-radius: var(--radius-xs);
+    padding: 16px; margin-top: 16px;
+    font-family: var(--font-mono); font-size: var(--type-body-sm); color: var(--color-text-danger);
+    word-break: break-all;
+  }
+  .amogenz-danger-alert-box.show { display: block; }
+
+  /* ── Content Result Box ── */
+  .result-interface-card { display: none; margin-top: 32px; }
+  .result-interface-card.show { display: block; }
+
+  .content-title-heading {
+    font-family: var(--font-body); font-size: clamp(1.15rem, 4vw, var(--type-heading-xl)); font-weight: 700;
+    color: var(--color-text-primary); margin-bottom: 4px;
+    word-break: break-word;
+  }
+
+  /* Grid auto-fit anti luber HP bray */
+  .grid-specification-scale {
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; 
+    margin-bottom: 16px;
+  }
+  @media(min-width: 480px) {
+    .grid-specification-scale {
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+  }
+
+  .spec-selection-card {
+    background: var(--color-bg-elevated); border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-xs); padding: 12px; cursor: pointer;
+    transition: all 150ms ease;
+  }
+  @media(min-width: 480px) {
+    .spec-selection-card { padding: 16px; }
+  }
+  .spec-selection-card:hover { border-color: var(--color-text-accent); }
+  .spec-selection-card.selected {
+    background: var(--color-action-ghost-hover); border-color: var(--color-border-accent);
+    box-shadow: var(--shadow-neon-sm);
+  }
+  .spec-selection-card .spec-main-txt {
+    font-family: var(--font-body); font-weight: 600; font-size: var(--type-body-sm); color: var(--color-text-primary);
+  }
+  .spec-selection-card .spec-sub-txt {
+    font-family: var(--font-ui); font-size: var(--type-caption); color: var(--color-text-secondary); margin-top: 4px;
+  }
+
+  /* ── Download Progress System ── */
+  .progress-buffer-wrap {
+    display: none; background: var(--color-bg-elevated); border: 1px solid var(--color-border-default);
+    height: 12px; border-radius: var(--radius-xs); overflow: hidden; margin-bottom: 16px;
+  }
+  .progress-buffer-fill { background-color: var(--color-action-primary); width: 0%; height: 100%; transition: width 0.1s ease; }
+
+  /* ── CYBERPLAYER & CYBER EQUALIZER ENGINE ── */
+  .cyberplayer-container-box {
+    background-color: var(--color-bg-elevated); border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-xs); padding: 16px; position: relative;
+  }
+  .cyberplayer-interface-deck { display: none; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .cyberplayer-interface-deck.show { display: flex; }
+
+  .player-trigger-circular-btn {
+    background: transparent; border: 1px solid var(--color-border-accent);
+    width: 40px; height: 40px; border-radius: 50%; color: var(--color-text-accent);
+    cursor: pointer; display: flex; align-items: center; justify-content: center; outline: none;
+    flex-shrink: 0;
+  }
+  .player-trigger-circular-btn:hover { background: var(--color-action-ghost-hover); box-shadow: var(--shadow-neon-sm); }
+
+  .equalizer-neon-glow-flex {
+    display: none; flex: 1; height: 32px; align-items: flex-end; gap: 3px;
+    border-bottom: 1px solid var(--color-border-default); overflow: hidden; padding-bottom: 2px;
+    min-width: 80px;
+  }
+  .equalizer-neon-glow-flex.show { display: flex; }
+  .equalizer-bar-unit { flex: 1; background-color: var(--color-action-primary); height: 3px; border-radius: 1px 1px 0 0; }
+  
+  .equalizer-neon-glow-flex.playing .equalizer-bar-unit:nth-child(2n) { animation: eqJump 0.6s ease-in-out infinite alternate; }
+  .equalizer-neon-glow-flex.playing .equalizer-bar-unit:nth-child(3n+1) { animation: eqJump 0.8s ease-in-out infinite alternate; }
+  .equalizer-neon-glow-flex.playing .equalizer-bar-unit:nth-child(4n+2) { animation: eqJump 0.5s ease-in-out infinite alternate; }
+  @keyframes eqJump { 0% { height: 3px; background-color: var(--color-action-primary); } 100% { height: 26px; background-color: var(--color-action-primary-hover); } }
+
+  .player-duration-stamp { font-family: var(--font-mono); font-size: var(--type-caption); color: var(--color-text-accent); min-width: 45px; text-align: right; flex-shrink: 0; }
+
+  .native-video-playback-window {
+    width: 100%; max-height: 280px; border-radius: var(--radius-xs);
+    background-color: #000000; display: none; margin-top: 12px;
+    border: 1px solid var(--color-border-default);
     outline: none;
   }
-  .netflix-input::placeholder {
-    color: var(--text-muted);
+  @media(min-width: 768px) {
+    .native-video-playback-window { max-height: 420px; }
+  }
+  .native-video-playback-window.show { display: block; }
+
+  /* Verified Badge */
+  .verified-badge-amogenz {
+    background-color: var(--color-verified-bg); color: var(--color-verified-text);
+    font-family: var(--font-ui); font-size: 9px; font-weight: 700;
+    padding: 2px 6px; border-radius: var(--radius-full); margin-left: 4px;
+    display: inline-flex; align-items: center; justify-content: center;
+    vertical-align: middle; flex-shrink: 0;
   }
 
-  /* Button System: Play & Marketing CTA */
-  .btn-play {
-    background-color: var(--text-primary);
-    color: var(--bg-black);
-    font-size: 16px;
-    font-weight: 700;
-    padding: 12px 24px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: opacity 0.2s;
+  /* History Log Rows Wrappers */
+  .history-vertical-stack { display: flex; flex-direction: column; gap: 12px; }
+  .history-log-row-card {
+    background: var(--color-bg-surface); border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm); padding: 14px;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
   }
-  .btn-play:hover { opacity: 0.85; }
-
-  .btn-cta-red {
-    background-color: var(--netflix-red);
-    color: var(--text-primary);
-    font-size: 16px;
-    font-weight: 700;
-    padding: 16px 32px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    text-transform: uppercase;
-    transition: background-color 0.2s;
+  .history-text-meta-block { flex: 1; min-width: 0; }
+  .history-main-title { 
+    font-size: var(--type-body-sm); font-weight: 600; color: var(--color-text-primary); 
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+    display: flex; align-items: center; gap: 4px;
   }
-  .btn-cta-red:hover { background-color: var(--red-dark); }
-  .btn-cta-red:disabled {
-    background-color: var(--surface-elevated);
-    color: var(--text-muted);
-    cursor: not-allowed;
+  .history-sub-label { font-family: var(--font-ui); font-size: var(--type-caption); color: var(--color-text-muted); margin-top: 4px; }
+  
+  .history-log-row-card .btn-ghost-amogenz {
+    width: auto; height: 32px; padding: 0 12px; font-size: 12px; flex-shrink: 0;
   }
 
-  .btn-secondary-info {
-    background-color: rgba(109,109,110,0.7);
-    color: var(--text-primary);
-    font-size: 16px;
-    font-weight: 700;
-    padding: 12px 24px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  /* Base Loader */
+  .loader-wrapper-block { display: none; text-align: center; padding: 32px; }
+  .amogenz-spinner {
+    width: 36px; height: 36px;
+    border: 3px solid var(--color-border-default); border-top-color: var(--color-action-primary);
+    border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto;
   }
-  .btn-secondary-info:hover { background-color: rgba(109,109,110,0.4); }
-
-  .btn-ghost-netflix {
-    background: transparent;
-    color: var(--netflix-red);
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: 700;
-  }
-  .btn-ghost-netflix:hover { color: var(--red-muted); }
-
-  .netflix-error-box {
-    display: none;
-    background-color: var(--red-dark);
-    color: var(--text-primary);
-    border-radius: 4px;
-    padding: 16px;
-    margin-top: 16px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  .netflix-error-box.show { display: block; }
-
-  /* Content Row & Dynamic Expand Grid */
-  .netflix-row-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: var(--text-primary);
-  }
-
-  .result-deck {
-    display: none;
-    margin-top: 32px;
-  }
-  .result-deck.show { display: block; }
-
-  .media-deck-expanded {
-    background-color: var(--surface);
-    border-radius: 6px;
-    padding: 20px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
-    transform: scale(1.02);
-    transition: transform 0.3s ease;
-  }
-
-  .match-score-badge {
-    color: var(--match-score);
-    font-weight: 700;
-    font-size: 14px;
-    margin-right: 12px;
-  }
-
-  .new-content-badge {
-    background-color: var(--surface-elevated);
-    color: var(--badge-new);
-    padding: 2px 6px;
-    font-size: 12px;
-    font-weight: 700;
-    border-radius: 2px;
-  }
-
-  /* Row Cards Layout */
-  .format-strip-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-
-  .format-thumbnail-card {
-    background: var(--surface-elevated);
-    border-radius: 4px;
-    padding: 20px;
-    cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
-    border: none;
-    position: relative;
-  }
-  .format-thumbnail-card:hover {
-    transform: scale(1.05);
-    z-index: 10;
-    background-color: #2a2a2a;
-  }
-  .format-thumbnail-card.selected {
-    border-left: 4px solid var(--netflix-red);
-    background-color: var(--surface-elevated);
-  }
-
-  .format-card-title { font-size: 18px; font-weight: 600; color: var(--text-primary); }
-  .format-card-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-
-  /* Progress Buffering bar */
-  .netflix-progress-container {
-    display: none;
-    background: var(--surface-elevated);
-    height: 4px;
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 24px;
-  }
-  .netflix-progress-fill {
-    background: var(--netflix-red);
-    width: 0%;
-    height: 100%;
-    transition: width 0.1s ease;
-  }
-
-  /* ── NETFLIX INTERACTIVE CONTROLS & LOGIC PREVIEW ── */
-  .preview-overlay-container {
-    background-color: #000000;
-    border-radius: 4px;
-    padding: 20px;
-    position: relative;
-    margin-top: 16px;
-  }
-
-  .netflix-player-ui {
-    display: none;
-    flex-direction: column;
-    gap: 16px;
-  }
-  .netflix-player-ui.show { display: flex; }
-
-  .netflix-eq-bars-container {
-    display: none;
-    flex: 1;
-    height: 32px;
-    align-items: flex-end;
-    gap: 4px;
-    border-bottom: 1px solid var(--surface-elevated);
-    overflow: hidden;
-    padding-bottom: 2px;
-  }
-  .netflix-eq-bars-container.show { display: flex; }
-  .netflix-eq-bar {
-    flex: 1;
-    background-color: var(--netflix-red);
-    height: 3px;
-  }
-  .netflix-eq-bars-container.playing .netflix-eq-bar:nth-child(2n) { animation: netflixEqJump 0.6s ease-in-out infinite alternate; }
-  .netflix-eq-bars-container.playing .netflix-eq-bar:nth-child(3n+1) { animation: netflixEqJump 0.8s ease-in-out infinite alternate; }
-  .netflix-eq-bars-container.playing .apple-eq-bar:nth-child(4n+2) { animation: netflixEqJump 0.5s ease-in-out infinite alternate; }
-  @keyframes netflixEqJump { 0% { height: 3px; } 100% { height: 26px; background-color: var(--red-muted); } }
-
-  .netflix-video-window {
-    width: 100%;
-    max-height: 420px;
-    border-radius: 4px;
-    background-color: #000000;
-    display: none;
-    margin-top: 8px;
-  }
-  .netflix-video-window.show { display: block; }
-
-  /* History Panel Stack */
-  .history-grid-stack { display: flex; flex-direction: column; gap: 12px; }
-  .history-movie-strip {
-    background: var(--surface);
-    border-radius: 4px;
-    padding: 16px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: transform 0.2s;
-  }
-  .history-movie-strip:hover { transform: scale(1.01); background-color: var(--surface-elevated); }
-  .movie-title-text { font-size: 16px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%; }
-  .movie-metadata-text { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
-
-  .buffer-loading-box { display: none; text-align: center; padding: 40px; }
-  .netflix-spinner {
-    width: 40px; height: 40px;
-    border: 4px solid var(--surface-elevated);
-    border-top-color: var(--netflix-red);
-    border-radius: 50%;
-    animation: netflixSpin 0.8s linear infinite;
-    margin: 0 auto;
-  }
-  @keyframes netflixSpin { to { transform: rotate(360deg); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   footer {
-    text-align: center;
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 64px;
-    padding: 16px;
+    text-align: center; padding: 48px 0 16px;
+    font-family: var(--font-ui); font-size: var(--type-caption); color: var(--color-text-muted);
   }
+  footer b { color: var(--color-text-accent); font-weight: 500; }
 </style>
 </head>
 <body>
 
-  <!-- Netflix Top Gradient Sticky Nav -->
-  <nav id="topNav">
+  <nav>
     <div class="nav-container">
-      <div style="font-weight:700; font-size:22px; color: var(--netflix-red); letter-spacing:-0.03em;">Amogenz</div>
+      <div class="brand-logo-txt">Spec</div>
       <div class="nav-tabs">
-        <button class="nav-link active" onclick="switchPanel('downloader')">Downloader</button>
-        <button class="nav-link" onclick="switchPanel('history')">History List</button>
+        <button class="nav-link active" onclick="switchPanel('downloader')">Beranda</button>
+        <button class="nav-link" onclick="switchPanel('history')">Riwayat</button>
       </div>
     </div>
   </nav>
 
-  <div class="main-container">
+  <div class="layout-wrapper">
     <header>
-      <h1>Unlimited media logs. <span style="font-size:24px; display:block; color:var(--text-secondary); font-weight:400; margin-top:8px;">Analyze any stream files anywhere.</span></h1>
+      <div class="visitor-counter-panel">
+        <div class="live-pulse-dot"></div>
+        <div class="visitor-text" id="activeVisitorCount">1 orang sedang memakai</div>
+      </div>
+      <h1 class="brand-hero-title">ENGINE <span class="neon-glow">DOWNLOADER</span></h1>
+      <p class="subtitle-branding-desc">(downloader media IG Fb Youtube) from amogenz</p>
     </header>
 
-    <!-- Panel Input Form -->
-    <div id="panel-downloader" class="panel active">
-      <div class="netflix-card">
-        <div class="form-group">
-          <label class="input-label">Ready to extract? Enter your target URL link below.</label>
-          <div class="input-wrapper">
-            <input type="text" id="urlInput" class="netflix-input" placeholder="Paste link disini ..">
-            <button class="btn-secondary-info" onclick="handlePaste()">Paste</button>
-          </div>
+    <div id="panel-downloader" class="panel-section panel active">
+      <div class="amogenz-card form-group-block">
+        <label class="ui-label-spec">Target Source URL</label>
+        <div class="form-input-row">
+          <input type="text" id="urlInput" class="input-text-amogenz" placeholder="Paste link disini bray ...">
+          <button class="btn-ghost-amogenz" onclick="handlePaste()">PASTE</button>
         </div>
-        <button id="fetchBtn" class="btn-cta-red" onclick="fetchMediaInfo()">Get Started ⚡</button>
+      </div>
+      <button id="fetchBtn" class="btn-primary-amogenz full-width-element" onclick="fetchMediaInfo()">⚡ ANALYZE TARGET</button>
+
+      <div id="loadingEl" class="loader-wrapper-block">
+        <div class="amogenz-spinner"></div>
+        <div style="font-family: var(--font-mono); font-size: var(--type-caption); color: var(--color-text-accent); margin-top: 12px;">INJECTING CORE STREAM TRANSLATOR PACKETS...</div>
       </div>
 
-      <div id="loadingEl" class="buffer-loading-box">
-        <div class="netflix-spinner"></div>
-        <div style="font-size:14px; color: var(--text-secondary); margin-top:16px;">Buffering media datastream layers...</div>
-      </div>
+      <div id="errorBox" class="amogenz-danger-alert-box"></div>
 
-      <div id="errorBox" class="netflix-error-box"></div>
-
-      <!-- Result Expanded Layout -->
-      <div id="resultCard" class="result-deck">
-        <h2 class="netflix-row-title">Active Playback Deck</h2>
-        <div class="media-deck-expanded">
-          <div style="margin-bottom:16px; display:flex; align-items:center;">
-            <span class="match-score-badge" id="metaScore">98% Match</span>
-            <span class="new-content-badge" id="metaPlatform">NETFLIX PIPELINE</span>
+      <div id="resultCard" class="result-interface-card">
+        <div class="amogenz-card">
+          <div class="metadata-block-header" style="margin-bottom: 24px;">
+            <div class="content-title-heading" id="metaTitle">Loading Structural Title...</div>
+            <div id="metaPlatform" style="font-family: var(--font-ui); font-size: var(--type-caption); color: var(--color-text-accent); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em;">NETWORK DATA LINKAGE DETECTED</div>
           </div>
-          <div class="media-title" id="metaTitle" style="font-size:24px; font-weight:700; margin-bottom:20px;">Loading Matrix Title...</div>
 
-          <!-- Video vs Audio Routing Preview Arena -->
-          <div class="form-group">
-            <label class="input-label">Cinematic Live Preview Stream</label>
-            <div class="preview-overlay-container">
+          <div class="form-group-block">
+            <label class="ui-label-spec">Cyber Equalizer Datastream Channel</label>
+            <div class="cyberplayer-container-box">
               <audio id="hiddenAudioPlayer" style="display:none;"></audio>
-              <div id="previewStatus" style="color: var(--text-secondary); font-size:14px;">Awaiting format strip confirmation arrays...</div>
+              <div id="previewStatus" style="font-family: var(--font-mono); font-size: var(--type-caption); color: var(--color-text-muted);">Awaiting format specification mapping selection...</div>
               
-              <div class="netflix-player-ui" id="cyberPlayerUI">
-                <div class="player-control-row">
-                  <!-- Custom Play Button ala Netflix Player -->
-                  <button class="btn-play" id="customPlayBtn" onclick="toggleCyberPlayer()">▶ Play</button>
+              <div class="cyber-player" id="cyberPlayerUI">
+                <div class="cyberplayer-interface-deck" id="playerInterfaceDeckRow">
+                  <button class="player-trigger-circular-btn" id="customPlayBtn" onclick="toggleCyberPlayer()">▶</button>
                   
-                  <div class="netflix-eq-bars-container" id="eqVisualizer">
-                    <div class="netflix-eq-bar"></div><div class="netflix-eq-bar"></div><div class="netflix-eq-bar"></div>
-                    <div class="netflix-eq-bar"></div><div class="netflix-eq-bar"></div><div class="netflix-eq-bar"></div>
-                    <div class="netflix-eq-bar"></div><div class="netflix-eq-bar"></div><div class="netflix-eq-bar"></div>
+                  <div class="equalizer-neon-glow-flex" id="eqVisualizer">
+                    <div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div>
+                    <div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div>
+                    <div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div>
+                    <div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div>
+                    <div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div><div class="equalizer-bar-unit"></div>
                   </div>
                   
-                  <div class="player-timer" id="customTimeTracker" style="font-size:14px; color:var(--text-secondary);">00:00</div>
+                  <div class="player-duration-stamp" id="customTimeTracker">00:00</div>
                 </div>
-                <!-- Video Native Stream Player -->
-                <video class="netflix-video-window" id="customVideoBox" playsinline controls></video>
+                <video class="native-video-playback-window" id="customVideoBox" playsinline controls></video>
               </div>
             </div>
           </div>
 
-          <h3 class="netflix-row-title" style="font-size:18px; margin-top:32px;">Choose Specification Formats</h3>
-          <div class="format-strip-row" id="fmtGrid"></div>
+          <div class="form-group-block" style="margin-top: 32px;">
+            <label class="ui-label-spec">Available Structural Specifications</label>
+            <div class="grid-specification-scale" id="fmtGrid"></div>
+          </div>
 
-          <div class="form-group" style="margin-bottom:0; margin-top:32px;">
-            <div class="netflix-progress-container" id="progWrap">
-              <div class="netflix-progress-fill" id="progFill"></div>
+          <div class="form-group-block" style="margin-bottom:0px; margin-top: 32px;">
+            <div class="progress-buffer-wrap" id="progWrap">
+              <div class="progress-buffer-fill" id="progFill"></div>
             </div>
-            <button id="dlBtn" class="btn-cta-red" onclick="triggerDownload()">↓ Download Content</button>
+            <button id="dlBtn" class="btn-primary-amogenz full-width-element" onclick="triggerDownload()">↓ DOWNLOAD PACKETS</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Panel Realtime Database Grid Strip -->
-    <div id="panel-history" class="panel">
-      <h2 class="netflix-row-title">Global Continue Watching Records</h2>
-      <div class="history-grid-stack" id="historyListContainer">
-        <div style="text-align:center; color: var(--text-secondary); padding:40px 0;">Syncing cloud cluster streams...</div>
+    <div id="panel-history" class="panel-section panel">
+      <div class="amogenz-card">
+        <div class="history-vertical-stack" id="historyListContainer">
+          <div style="text-align:center; font-family: var(--font-mono); color: var(--color-text-muted); padding:40px 0;">SYNCING REMOTE STORAGE PACKETS MODULE...</div>
+        </div>
       </div>
     </div>
 
     <footer>
-      <p>AMO ENGINE METADATA PACKETS SYSTEM &copy; 2026. Powered by Bani Ibrahim Workshop.</p>
+      <p>AMOGENZ SPEC · &copy; 2026 <br>By • Ibrahim Studio</p>
+
     </footer>
   </div>
 
-<!-- Firebase Realtime Engine -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
@@ -532,16 +592,16 @@
       const cleanKey = generateSafeKey(url);
       const logRef = ref(db, `downloader_history/${cleanKey}`);
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-      const formattedDate = new Date().toLocaleDateString('id-ID', options);
+      const formattedDate = new Date().toLocaleDateString('id-ID', options) + " WIB";
 
       await set(logRef, {
-        title: title || "Streaming Content",
+        title: title || "Payload Package",
         url: url,
         platform: platform || "net",
         timestamp: Date.now(),
         dateStr: formattedDate
       });
-    } catch (e) { console.error("Firebase transaction exception:", e); }
+    } catch (e) { console.error("Firebase payload matrix transaction error:", e); }
   };
 
   const historyRef = ref(db, 'downloader_history');
@@ -549,7 +609,7 @@
     const container = document.getElementById('historyListContainer');
     if (!container) return;
     if (!snapshot.exists()) {
-      container.innerHTML = `<div style="text-align:center; color: var(--text-secondary); padding:40px 0;">No watch logs structured in cloud nodes.</div>`;
+      container.innerHTML = `<div style="text-align:center; font-family: var(--font-mono); color: var(--color-text-muted); padding:40px 0;">NO DATABASE ALLOCATIONS REGISTERED IN CLOUD SURFACES.</div>`;
       return;
     }
     const data = snapshot.val();
@@ -557,16 +617,33 @@
     container.innerHTML = "";
     sortedList.forEach(item => {
       const itemEl = document.createElement('div');
-      itemEl.className = 'history-movie-strip';
+      itemEl.className = 'history-log-row-card';
+      
+      let verifiedBadge = "";
+      if (item.title && item.title.toLowerCase().includes('amogenz')) {
+        verifiedBadge = `<span class="verified-badge-amogenz">✓ VERIFIED</span>`;
+      }
+
       itemEl.innerHTML = `
-        <div style="min-width: 0; flex: 1;">
-          <div class="movie-title-text">${esc(item.title)}</div>
-          <div class="movie-metadata-text">${item.platform.toUpperCase()} • ${item.dateStr}</div>
+        <div class="history-text-meta-block">
+          <div class="history-main-title">
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${esc(item.title)}</span>
+            ${verifiedBadge}
+          </div>
+          <div class="history-sub-label">${item.platform.toUpperCase()} CELL // ${item.dateStr}</div>
         </div>
-        <button class="btn-ghost-netflix" onclick="loadFromHistory('${esc(item.url)}')">INJECT</button>
+        <button class="btn-ghost-amogenz" onclick="loadFromHistory('${esc(item.url)}')">INJECT</button>
       `;
       container.appendChild(itemEl);
     });
+  });
+
+  const visitorRef = ref(db, 'visitor_count/current_active');
+  onValue(visitorRef, (snapshot) => {
+    const el = document.getElementById('activeVisitorCount');
+    if(!el) return;
+    let baseCount = snapshot.exists() ? snapshot.val() : Math.floor(Math.random() * 4) + 1;
+    el.textContent = `${baseCount} orang sedang memakai`;
   });
 </script>
 
@@ -576,16 +653,9 @@ let selectedFormat = null;
 const audioCore = document.getElementById('hiddenAudioPlayer');
 const videoCore = document.getElementById('customVideoBox');
 
-// Nav Background Change Listener
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('topNav');
-  if (window.scrollY > 20) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-});
-
 function switchPanel(panelName) {
   document.querySelectorAll('.nav-link').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.panel-section').forEach(p => p.classList.remove('active'));
   if(panelName === 'downloader') {
     document.querySelector("button[onclick=\"switchPanel('downloader')\"]").classList.add('active');
     document.getElementById('panel-downloader').classList.add('active');
@@ -598,7 +668,7 @@ function switchPanel(panelName) {
 function handlePaste() {
   navigator.clipboard.readText().then(text => {
     document.getElementById('urlInput').value = text;
-  }).catch(() => showError("Clipboards accessibility forbidden."));
+  }).catch(() => showError("Validation rejected: Clipboard permissions missing."));
 }
 
 function loadFromHistory(url) {
@@ -609,7 +679,7 @@ function loadFromHistory(url) {
 
 async function fetchMediaInfo() {
   const url = document.getElementById('urlInput').value.trim();
-  if (!url) return showError("⚠️ Input payload string empty.");
+  if (!url) return showError("⚠️ Validation Failed: URL string input token cannot be empty.");
 
   setLoading(true);
   hideError();
@@ -619,7 +689,7 @@ async function fetchMediaInfo() {
   try {
     const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Data array query dropped.");
+    if (!res.ok) throw new Error(data.error || "Matrix stream link parsing drop.");
 
     currentMediaData = data;
     renderResultCard(data);
@@ -627,39 +697,34 @@ async function fetchMediaInfo() {
     if(window.saveToFirebaseHistory) {
       window.saveToFirebaseHistory(data.title, data.webpage_url || url, data.platform);
     }
-  } catch (err) { showError("Extraction Error: " + err.message); }
+  } catch (err) { showError("ENGINE ERROR: " + err.message); }
   finally { setLoading(false); }
 }
 
 function renderResultCard(data) {
   document.getElementById('metaTitle').textContent = data.title;
-  document.getElementById('metaPlatform').textContent = `${(data.platform || 'unknown').toUpperCase()} NETWORK`;
+  document.getElementById('metaPlatform').textContent = `PIPELINE VERIFIED LOG // ${data.platform ? data.platform.toUpperCase() : 'UNKNOWN CORE'}`;
   
-  // Custom Match Score Generator ala Netflix
-  const scores = ['98% Match', '95% Match', '99% Match', '92% Match'];
-  document.getElementById('metaScore').textContent = scores[Math.floor(Math.random() * scores.length)];
-
   const grid = document.getElementById('fmtGrid');
   grid.innerHTML = "";
 
   if (!data.formats || data.formats.length === 0) {
-    grid.innerHTML = `<span style="color:var(--netflix-red)">Specification lists empty.</span>`;
+    grid.innerHTML = `<span style="color:var(--color-text-danger)">Specification array empty.</span>`;
     return;
   }
 
   let highMp3Rendered = false;
   data.formats.forEach((fmt, idx) => {
-    // FIX BUG: Konversi string 'mp3' asal menjadi pemisah kualitas bray bray bray
     if (fmt === 'mp3') {
       if(!highMp3Rendered) {
-        createFormatCard(grid, 'mp3_high', 'AUDIO MP3 PREMIUM', 'Lossless Pack (320kbps High)', idx === 0);
-        createFormatCard(grid, 'mp3_std', 'AUDIO MP3 STANDARD', 'Compressed Rate (128kbps Standard)', false);
+        createFormatCard(grid, 'mp3_high', 'AUDIO MP3 MASTER', '320kbps Lossless High Resolution', idx === 0);
+        createFormatCard(grid, 'mp3_std', 'AUDIO MP3 STANDARD', '128kbps Standard Data Saver', false);
         highMp3Rendered = true;
       }
     } else {
-      let title = "VIDEO RESOLUTION HD"; let dec = "Direct Streaming Format 1080p Matrix";
-      if (fmt === 'video_sd') { title = "VIDEO RESOLUTION SD"; dec = "Low Data Bandwidth Pack 480p"; }
-      else if (fmt.includes('image')) { title = "ARTWORK GRAPHIC VIEW"; dec = "Static Image Resolution Source"; }
+      let title = "VIDEO MATRIX HD"; let dec = "Direct 1080p Pre-merged";
+      if (fmt === 'video_sd') { title = "VIDEO MATRIX SD"; dec = "Low Bandwidth 480p Pack"; }
+      else if (fmt.includes('image')) { title = "STATIC IMAGE PACKET"; dec = "Source Resolution Asset"; }
       createFormatCard(grid, fmt, title, dec, idx === 0 && !highMp3Rendered);
     }
   });
@@ -669,8 +734,8 @@ function renderResultCard(data) {
 
 function createFormatCard(targetGrid, fmtKey, title, description, isSelect) {
   const card = document.createElement('div');
-  card.className = `format-thumbnail-card ${isSelect ? 'selected' : ''}`;
-  card.innerHTML = `<div class="format-card-title">${title}</div><div class="format-card-desc">${description}</div>`;
+  card.className = `spec-selection-card ${isSelect ? 'selected' : ''}`;
+  card.innerHTML = `<div class="spec-main-txt">${title}</div><div class="spec-sub-txt">${description}</div>`;
   card.onclick = () => selectFormat(fmtKey, card);
   targetGrid.appendChild(card);
   if (isSelect) selectFormat(fmtKey, card);
@@ -678,24 +743,23 @@ function createFormatCard(targetGrid, fmtKey, title, description, isSelect) {
 
 async function selectFormat(fmt, cardEl) {
   selectedFormat = fmt;
-  document.querySelectorAll('.format-thumbnail-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.spec-selection-card').forEach(c => c.classList.remove('selected'));
   cardEl.classList.add('selected');
   
   resetCyberPlayer();
   const statusEl = document.getElementById('previewStatus');
   const eqEl = document.getElementById('eqVisualizer');
-  const customPlayBtn = document.getElementById('customPlayBtn');
+  const rowDeck = document.getElementById('playerInterfaceDeckRow');
   
   statusEl.style.display = 'block';
-  statusEl.innerHTML = `<span style="color: var(--netflix-red); font-size:14px;">Engaging stream configurations pipeline...</span>`;
+  statusEl.innerHTML = `<span style="color: var(--color-text-accent); font-family:var(--font-mono); font-size:var(--type-caption);">⏳ ALLOCATING TARGET STREAM MATRIX LINK...</span>`;
   
   try {
     const targetUrl = document.getElementById('urlInput').value.trim();
     
-    // FIX MUTLAK SINKRONISASI API SENSITIVE: Kirim string parameter 'mp3' murni ke backend agar TIDAK INVALID FORMAT bray bray bray
     let formatQuery = fmt;
     if (fmt.includes('mp3')) {
-      formatQuery = 'mp3'; 
+      formatQuery = 'mp3';
     } else if (currentMediaData.platform === 'youtube' && fmt === 'video_hd') {
       formatQuery = 'video_sd';
     }
@@ -704,7 +768,7 @@ async function selectFormat(fmt, cardEl) {
     const streamData = await res.json();
     
     if(!res.ok || !streamData.url) {
-      statusEl.innerHTML = `<span style="color: var(--text-secondary); font-size: 14px;">Preview restricted. Main operational execution active.</span>`;
+      statusEl.innerHTML = `<span style="color: var(--color-text-muted); font-family:var(--font-mono); font-size: var(--type-caption);">⚠️ STREAM RESTRICTION IN EFFECT. MAIN EXTRACTION CTA IS FUNCTIONAL.</span>`;
       return;
     }
     
@@ -714,25 +778,22 @@ async function selectFormat(fmt, cardEl) {
     if (fmt.includes('mp3')) {
       audioCore.src = streamData.url;
       videoCore.classList.remove('show');
-      
-      // Tampilkan equalizer khusus MP3 bray
       eqEl.classList.add('show');
-      customPlayBtn.style.display = 'inline-flex';
+      rowDeck.classList.add('show');
     } else if (fmt.includes('image')) {
       document.getElementById('cyberPlayerUI').classList.remove('show');
       statusEl.style.display = 'block';
-      statusEl.innerHTML = `<img src="${streamData.url}" style="max-width:100%; max-height:280px; border-radius:4px; display:block; margin:0 auto;" alt="Thumbnail">`;
+      statusEl.innerHTML = `<img src="${streamData.url}" style="max-width:100%; max-height:260px; border-radius:var(--radius-sm); display:block; margin:0 auto; border:1px solid var(--color-border-default);" alt="Source Thumbnail View">`;
     } else {
-      // Pemutar video murni terisolasi, sembunyikan audioCore dan equalizer
       audioCore.src = ""; 
       eqEl.classList.remove('show');
-      customPlayBtn.style.display = 'none';
+      rowDeck.classList.remove('show');
       
       videoCore.src = streamData.url;
       videoCore.classList.add('show');
     }
   } catch(e) {
-    statusEl.innerHTML = `<span style="color: var(--text-secondary); font-size:14px;">Connection datastream packet dropped.</span>`;
+    statusEl.innerHTML = `<span style="color: var(--color-text-muted); font-family:var(--font-mono); font-size:var(--type-caption);">⚠️ NETWORK LINK DISCONNECTED.</span>`;
   }
 }
 
@@ -743,11 +804,11 @@ function toggleCyberPlayer() {
   if (!videoCore.classList.contains('show')) {
     if (audioCore.paused) {
       audioCore.play();
-      btn.textContent = "█ Pause";
+      btn.textContent = "█"; btn.style.color = "var(--color-text-danger)";
       eq.classList.add('playing');
     } else {
       audioCore.pause();
-      btn.textContent = "▶ Play";
+      btn.textContent = "▶"; btn.style.color = "var(--color-text-accent)";
       eq.classList.remove('playing');
     }
   }
@@ -774,7 +835,7 @@ function resetCyberPlayer() {
 
 function resetCyberPlayerUIState() {
   const btn = document.getElementById('customPlayBtn');
-  if(btn) { btn.textContent = "▶ Play"; }
+  if(btn) { btn.textContent = "▶"; btn.style.color = "var(--color-text-accent)"; }
   const eq = document.getElementById('eqVisualizer');
   if(eq) eq.classList.remove('playing');
   document.getElementById('customTimeTracker').textContent = "00:00";
@@ -788,14 +849,13 @@ async function triggerDownload() {
   const progFill = document.getElementById('progFill');
 
   btn.disabled = true;
-  btn.innerHTML = 'Initializing network buffer...';
+  btn.innerHTML = '⏳ INITIALIZING BIT BUFFER ALLOCATION...';
   progWrap.style.display = 'block';
   progFill.style.width = '20%';
 
   try {
     const url = document.getElementById('urlInput').value.trim();
     
-    // FIX SINKRONISASI DOWNLOAD SENSITIVE: Gunakan string parameter 'mp3' murni agar API backend tidak mendeduksi format aslinya
     let formatQuery = selectedFormat;
     if (selectedFormat.includes('mp3')) {
       formatQuery = 'mp3';
@@ -803,20 +863,20 @@ async function triggerDownload() {
 
     const res = await fetch(`/api/download?url=${encodeURIComponent(url)}&format=${formatQuery}`);
     const data = await res.json();
-    if (!res.ok || !data.url) throw new Error(data.error || "Streaming pipeline buffer allocation exception.");
+    if (!res.ok || !data.url) throw new Error(data.error || "Allocation target datastream pipeline drop.");
 
     progFill.style.width = '50%';
-    btn.innerHTML = 'Extracting stream blob bits...';
+    btn.innerHTML = '⚡ PARSING BLOB SEGMENTS FROM TARGET LOGS NETWORK...';
 
     const fileRes = await fetch(data.url);
-    if (!fileRes.ok) throw new Error("Cloud CDN matrix unreached.");
+    if (!fileRes.ok) throw new Error("Remote cloud gateway packet loss.");
     
     progFill.style.width = '85%';
     const fileBlob = await fileRes.blob();
     const blobUrl = window.URL.createObjectURL(fileBlob);
 
     progFill.style.width = '100%';
-    btn.innerHTML = 'Writing bits to operating system directory...';
+    btn.innerHTML = '📦 INJECTING DATA PACKAGE WRITER TO STORAGE DIRECTORY...';
 
     const a = document.createElement('a');
     a.href = blobUrl;
@@ -828,11 +888,11 @@ async function triggerDownload() {
     document.body.removeChild(a);
 
   } catch (err) {
-    showError('Process Aborted: ' + err.message);
+    showError('ABORT OPERATION MATRIX: ' + err.message);
   } finally {
     setTimeout(() => {
       btn.disabled = false;
-      btn.innerHTML = '↓ Download Content';
+      btn.innerHTML = '↓ DOWNLOAD NOW';
       progWrap.style.display = 'none';
       progFill.style.width = '0%';
     }, 1500);
@@ -842,7 +902,7 @@ async function triggerDownload() {
 function setLoading(show) {
   document.getElementById('loadingEl').style.display = show ? 'block' : 'none';
   document.getElementById('fetchBtn').disabled = show;
-  document.getElementById('fetchBtn').textContent = show ? 'Running streaming analysis...' : 'Get Started ⚡';
+  document.getElementById('fetchBtn').textContent = show ? '⏳ RUNNING ANALYSIS FLOW...' : '⚡ ANALYZE TARGET';
 }
 
 function showError(msg) {
