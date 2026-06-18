@@ -62,7 +62,7 @@
   }
 
   /* ── Header ── */
-  header { text-align: center; padding: 44px 0 36px; }
+  header { text-align: center; padding: 44px 0 20px; }
 
   .badge {
     display: inline-flex;
@@ -108,45 +108,36 @@
     margin-top: 10px;
   }
 
-  /* ── Platform tabs ── */
-  .tabs {
+  /* Main Navigation Tabs */
+  .nav-tabs {
     display: flex;
-    gap: 6px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 6px;
-    margin: 28px 0 18px;
+    gap: 8px;
+    margin: 20px 0;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
   }
 
-  .tab {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    padding: 12px 6px;
-    border-radius: 7px;
-    cursor: pointer;
-    border: 1px solid transparent;
+  .nav-btn {
     background: transparent;
+    border: 1px solid transparent;
     color: var(--muted);
-    font-family: 'Inter', sans-serif;
+    padding: 8px 16px;
+    font-family: 'Share Tech Mono', monospace;
+    cursor: pointer;
     font-size: 13px;
-    font-weight: 500;
+    letter-spacing: 1px;
     transition: all .2s;
+    border-radius: 4px;
   }
 
-  .tab:hover { color: var(--text); background: rgba(57,255,20,0.04); }
-
-  .tab.active {
-    background: rgba(57,255,20,0.11);
+  .nav-btn.active {
     border-color: var(--border-hot);
     color: var(--neon);
-    text-shadow: 0 0 8px rgba(57,255,20,0.4);
+    background: rgba(57,255,20,0.05);
   }
 
-  .tab svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .panel { display: none; }
+  .panel.active { display: block; }
 
   /* ── Input ── */
   .input-card {
@@ -206,7 +197,6 @@
 
   .paste-btn:hover { background: rgba(57,255,20,0.18); box-shadow: 0 0 10px rgba(57,255,20,0.2); }
 
-  /* ── Fetch btn ── */
   .fetch-btn {
     width: 100%;
     padding: 16px;
@@ -221,32 +211,14 @@
     cursor: pointer;
     transition: all .2s;
     text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
   }
 
-  .fetch-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
-    transform: translateX(-100%);
-    transition: transform .5s;
-  }
-
-  .fetch-btn:hover::after { transform: translateX(100%); }
   .fetch-btn:hover { box-shadow: 0 0 30px rgba(57,255,20,0.45); }
   .fetch-btn:disabled { opacity: .45; cursor: not-allowed; }
 
-  /* ── Loading ── */
-  .loading {
-    display: none;
-    text-align: center;
-    padding: 44px;
-  }
-
+  /* ── Loading & Error ── */
+  .loading { display: none; text-align: center; padding: 44px; }
   .loading.show { display: block; }
-
   .spinner-ring {
     width: 44px; height: 44px;
     border: 2px solid var(--border);
@@ -255,615 +227,402 @@
     animation: spin .75s linear infinite;
     margin: 0 auto 14px;
   }
-
   @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-txt { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--neon); letter-spacing: 3px; }
 
-  .loading-txt {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    color: var(--neon);
-    letter-spacing: 3px;
-    animation: pulse 1.4s ease-in-out infinite;
-  }
-
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-
-  /* ── Error ── */
   .error-box {
-    display: none;
-    background: rgba(255,0,110,0.07);
-    border: 1px solid rgba(255,0,110,0.28);
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin-top: 14px;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 12px;
-    color: var(--neon3);
-    letter-spacing: 1px;
-    line-height: 1.6;
+    display: none; background: rgba(255,0,110,0.07); border: 1px solid rgba(255,0,110,0.28);
+    border-radius: 8px; padding: 14px 18px; margin-top: 14px; font-family: 'Share Tech Mono', monospace;
+    font-size: 12px; color: var(--neon3);
   }
-
   .error-box.show { display: block; }
 
-  /* ── Result card ── */
+  /* ── Result Card ── */
   .result-card {
-    display: none;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-top: 14px;
-    animation: fadeUp .3s ease;
+    display: none; background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; margin-top: 14px; animation: fadeUp .3s ease;
   }
-
   .result-card.show { display: block; }
-
   @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-  /* Media header */
-  .media-header {
-    display: flex;
-    gap: 16px;
-    padding: 20px;
-    border-bottom: 1px solid var(--border);
-    align-items: flex-start;
-  }
-
-  .thumb-wrap {
-    flex-shrink: 0;
-    width: 130px;
-  }
-
-  .thumb-wrap img {
-    width: 100%;
-    aspect-ratio: 16/9;
-    object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--bg2);
-    display: block;
-  }
-
-  .thumb-wrap.is-image img { aspect-ratio: 1; }
-
+  .media-header { display: flex; gap: 16px; padding: 20px; border-bottom: 1px solid var(--border); }
+  .thumb-wrap { flex-shrink: 0; width: 130px; }
+  .thumb-wrap img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
   .media-meta { flex: 1; min-width: 0; }
+  .meta-title { font-size: 14px; font-weight: 600; color: #e8ffe8; margin-bottom: 10px; }
 
-  .meta-platform {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    color: var(--neon2);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 7px;
-  }
+  .section { padding: 20px; border-bottom: 1px solid var(--border); }
+  .sec-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--neon); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
 
-  .meta-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #e8ffe8;
-    line-height: 1.45;
-    margin-bottom: 10px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .meta-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .chip {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 2px 8px;
-  }
-
-  /* Sections */
-  .section {
-    padding: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .section:last-child { border-bottom: none; }
-
-  .sec-label {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    color: var(--neon);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  /* Format grid */
-  .fmt-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 8px;
-  }
-
+  .fmt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
   .fmt-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    padding: 14px 8px;
-    border-radius: 8px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all .2s;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--muted);
-    text-align: center;
-    user-select: none;
+    display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 14px 8px;
+    border-radius: 8px; background: var(--bg2); border: 1px solid var(--border); cursor: pointer;
+    font-size: 12px; color: var(--muted); text-align: center;
   }
+  .fmt-card.sel { background: rgba(57,255,20,0.09); border-color: var(--neon); color: var(--neon); }
 
-  .fmt-card .fi { font-size: 24px; }
-
-  .fmt-card .fb {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 9px;
-    background: rgba(57,255,20,0.08);
-    color: var(--neon);
-    border-radius: 3px;
-    padding: 1px 5px;
-  }
-
-  .fmt-card .fd { font-size: 10px; color: var(--muted); }
-
-  .fmt-card:hover { border-color: rgba(57,255,20,0.35); color: var(--text); }
-
-  .fmt-card.sel {
-    background: rgba(57,255,20,0.09);
-    border-color: var(--neon);
-    color: var(--neon);
-    box-shadow: 0 0 14px rgba(57,255,20,0.12);
-  }
-
-  /* Quality row */
-  .qual-row { display: flex; gap: 8px; }
-
-  .qual-btn {
-    flex: 1;
-    padding: 11px;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    color: var(--muted);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 11px;
-    cursor: pointer;
-    transition: all .2s;
-    text-align: center;
-    user-select: none;
-  }
-
-  .qual-btn:hover { border-color: rgba(57,255,20,0.35); color: var(--text); }
-
-  .qual-btn.sel { background: rgba(57,255,20,0.09); border-color: var(--neon); color: var(--neon); }
-
-  .qual-main { font-size: 15px; display: block; margin-bottom: 2px; font-weight: 600; }
-  .qual-sub { font-size: 9px; opacity: .65; }
-
-  /* Download btn */
   .dl-btn {
-    width: 100%;
-    padding: 16px;
-    background: transparent;
-    border: 1px solid var(--neon);
-    border-radius: 8px;
-    color: var(--neon);
-    font-family: 'Orbitron', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all .2s;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    width: 100%; padding: 16px; background: transparent; border: 1px solid var(--neon);
+    border-radius: 8px; color: var(--neon); font-family: 'Orbitron', sans-serif; font-size: 13px;
+    font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
   }
-
   .dl-btn:hover { background: rgba(57,255,20,0.1); box-shadow: 0 0 22px rgba(57,255,20,0.2); }
-  .dl-btn:disabled { opacity: .35; cursor: not-allowed; }
 
-  /* Progress */
-  .progress { display: none; margin-top: 14px; }
-  .progress.show { display: block; }
-
-  .prog-bar {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    height: 5px;
-    overflow: hidden;
+  /* Preview Components */
+  .preview-box {
+    background: #000; border: 1px dashed var(--border-hot); border-radius: 6px;
+    padding: 10px; display: flex; justify-content: center; align-items: center; min-height: 60px;
   }
+  .preview-box video { width: 100%; max-height: 360px; border-radius: 4px; }
+  .preview-box audio { width: 100%; }
+  .preview-box img { max-width: 100%; max-height: 300px; object-fit: contain; border-radius: 4px; }
 
-  .prog-fill {
-    height: 100%;
-    background: var(--neon);
-    box-shadow: 0 0 8px rgba(57,255,20,0.5);
-    border-radius: 4px;
-    width: 0%;
-    transition: width .25s;
+  /* ── History Panel UI ── */
+  .history-list { display: flex; flex-direction: column; gap: 12px; }
+  .history-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; display: flex; gap: 14px; align-items: center; transition: all .2s;
   }
-
-  .prog-txt {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    color: var(--neon);
-    text-align: right;
-    margin-top: 5px;
-    letter-spacing: 1px;
+  .history-item:hover { border-color: var(--border-hot); }
+  .history-thumb { width: 80px; aspect-ratio: 16/9; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+  .history-info { flex: 1; min-width: 0; }
+  .history-title { font-size: 13px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .history-date { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 4px; }
+  .history-action-btn {
+    background: rgba(0,245,255,0.08); border: 1px solid var(--neon2); padding: 6px 12px;
+    border-radius: 4px; color: var(--neon2); font-family: 'Share Tech Mono', monospace; font-size: 11px;
+    cursor: pointer;
   }
+  .history-action-btn:hover { background: rgba(0,245,255,0.2); }
+  .empty-history { font-family: 'Share Tech Mono', monospace; color: var(--muted); text-align: center; padding: 40px 0; }
 
-  /* Footer */
-  footer {
-    text-align: center;
-    padding: 48px 0 0;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 2px;
-  }
-
+  footer { text-align: center; padding: 48px 0 0; font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 2px; }
   footer b { color: var(--neon); font-weight: 400; }
-
-  .platform-legend {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-  }
-
-  .pl-item {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .pl-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--neon); }
-
-  /* Mobile */
-  @media (max-width: 500px) {
-    .tabs { flex-direction: column; }
-    .media-header { flex-direction: column; }
-    .thumb-wrap { width: 100%; }
-    .thumb-wrap img { aspect-ratio: 16/9; width: 100%; }
-  }
 </style>
 </head>
 <body>
 <div class="wrap">
-
-  <!-- Header -->
   <header>
-    <div class="badge">
-      <div class="badge-dot"></div>
-      AMOGENZ · DOWNLOADER · v3.0
-    </div>
+    <div class="badge"><div class="badge-dot"></div> AMOGENZ · DOWNLOADER · v4.0</div>
     <h1>AMO<span class="accent">DL</span></h1>
-    <p class="sub">// SOCIAL MEDIA DOWNLOADER ENGINE //</p>
+    <p class="sub">// MULTIMEDIA ENGINE + GLOBAL HISTORY //</p>
   </header>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab active" onclick="setTab('youtube')" id="tab-youtube">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg>
-      YouTube
-    </button>
-    <button class="tab" onclick="setTab('instagram')" id="tab-instagram">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8 0 3.2 0 3.6-.1 4.8-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.9.1-3.2 0-3.6 0-4.8-.1-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12c0-3.2 0-3.6.1-4.8C2.4 3.9 4 2.3 7.2 2.3c1.3-.1 1.6-.1 4.8-.1zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1.0 8.3 0 8.7 0 12c0 3.3 0 3.7.1 4.9.2 4.4 2.6 6.8 7 7C8.3 24 8.7 24 12 24c3.3 0 3.7 0 4.9-.1 4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9 0-3.3 0-3.7-.1-4.9C23.7 2.7 21.3.3 16.9.1 15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4A6.2 6.2 0 0 0 12 5.8zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8z"/></svg>
-      Instagram
-    </button>
-    <button class="tab" onclick="setTab('facebook')" id="tab-facebook">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.1C24 5.4 18.6 0 12 0S0 5.4 0 12.1C0 18.1 4.4 23 10.1 24v-8.4H7.1v-3.5h3V9.4c0-3 1.8-4.6 4.5-4.6 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9v2.3h3.4l-.5 3.5H14V24c5.7-1 10.1-5.9 10.1-11.9z"/></svg>
-      Facebook
-    </button>
+  <div class="nav-tabs">
+    <button class="nav-btn active" onclick="switchPanel('downloader')">[-] DOWNLOADER</button>
+    <button class="nav-btn" onclick="switchPanel('history')">[-] GLOBAL HISTORY</button>
   </div>
 
-  <!-- URL Input -->
-  <div class="input-card">
-    <span class="input-label">// PASTE URL</span>
-    <div class="input-row">
-      <input
-        type="text"
-        id="urlInput"
-        class="url-input"
-        placeholder="https://www.youtube.com/watch?v=..."
-        autocomplete="off"
-        spellcheck="false"
-      />
-      <button class="paste-btn" onclick="pasteURL()">📋 PASTE</button>
-    </div>
-  </div>
-
-  <button class="fetch-btn" id="fetchBtn" onclick="fetchMedia()">⚡ ANALYZE URL</button>
-
-  <!-- Loading -->
-  <div class="loading" id="loadingEl">
-    <div class="spinner-ring"></div>
-    <div class="loading-txt">SCANNING MEDIA...</div>
-  </div>
-
-  <!-- Error -->
-  <div class="error-box" id="errorBox"></div>
-
-  <!-- Result -->
-  <div class="result-card" id="resultCard">
-
-    <div class="media-header" id="mediaHeader"></div>
-
-    <div class="section" id="fmtSection">
-      <div class="sec-label">// PILIH FORMAT</div>
-      <div class="fmt-grid" id="fmtGrid"></div>
-    </div>
-
-    <div class="section" id="qualSection" style="display:none;">
-      <div class="sec-label">// PILIH KUALITAS</div>
-      <div class="qual-row" id="qualRow"></div>
-    </div>
-
-    <div class="section">
-      <button class="dl-btn" id="dlBtn" onclick="startDownload()">
-        ↓ &nbsp;DOWNLOAD NOW
-      </button>
-      <div class="progress" id="progressEl">
-        <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
-        <div class="prog-txt" id="progTxt">0%</div>
+  <div id="panel-downloader" class="panel active">
+    <div class="input-card">
+      <span class="input-label">TARGET SOURCE URL</span>
+      <div class="input-row">
+        <input type="text" id="urlInput" class="url-input" placeholder="Paste YouTube, Instagram, FB link di sini...">
+        <button class="paste-btn" onclick="handlePaste()">PASTE</button>
       </div>
     </div>
+    <button id="fetchBtn" class="fetch-btn" onclick="fetchMediaInfo()">⚡ ANALYZE URL</button>
 
+    <div id="loadingEl" class="loading">
+      <div class="spinner-ring"></div>
+      <div class="loading-txt">PARSING SYSTEM TARGET MODULE...</div>
+    </div>
+
+    <div id="errorBox" class="error-box"></div>
+
+    <div id="resultCard" class="result-card">
+      <div class="media-header">
+        <div class="thumb-wrap" id="metaThumbWrap">
+          <img id="metaThumb" src="" alt="Thumbnail">
+        </div>
+        <div class="media-meta">
+          <div class="meta-platform" id="metaPlatform">PLATFORM</div>
+          <div class="meta-title" id="metaTitle">Media Title Loading...</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sec-label">⚡ LIVE PREVIEW STREAM (BEFORE DOWNLOAD)</div>
+        <div class="preview-box" id="previewContainer">
+          <span style="color: var(--muted); font-size: 11px; font-family: 'Share Tech Mono';">Select format to render live stream...</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sec-label">SELECT STREAM FORMAT</div>
+        <div class="fmt-grid" id="fmtGrid"></div>
+      </div>
+
+      <div class="section">
+        <button id="dlBtn" class="dl-btn" onclick="triggerDownload()">↓ DOWNLOAD NOW</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Legend -->
-  <div class="platform-legend">
-    <div class="pl-item"><div class="pl-dot"></div> YT: Video / MP3 / Thumbnail</div>
-    <div class="pl-item"><div class="pl-dot"></div> IG: Post / Reels / Foto</div>
-    <div class="pl-item"><div class="pl-dot"></div> FB: Video / Reels</div>
+  <div id="panel-history" class="panel">
+    <div class="input-card">
+      <span class="input-label">// GLOBAL CLOUD REALTIME LOGS</span>
+      <div class="history-list" id="historyListContainer">
+        <div class="empty-history">FETCHING NETWORK RECORDS...</div>
+      </div>
+    </div>
   </div>
 
   <footer>
-    BUILT BY <b>AMOGENZ</b> · MOJOKERTO · 2024
+    <p>POWERED BY <b>BANI IBRAHIM WORKSHOP</b> &copy; 2026</p>
   </footer>
-
 </div>
 
-<script>
-// ── Config ────────────────────────────────────────────────
-// Ganti BASE_URL dengan URL Vercel project lo setelah deploy
-const BASE_URL = window.location.origin;
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// ── State ─────────────────────────────────────────────────
-let currentTab  = 'youtube';
-let selectedFmt = null;
-let selectedQual = null;
-let currentInfo = null;
-
-// ── Tabs ──────────────────────────────────────────────────
-function setTab(p) {
-  currentTab = p;
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + p).classList.add('active');
-  const ph = {
-    youtube:   'https://www.youtube.com/watch?v=...',
-    instagram: 'https://www.instagram.com/p/...',
-    facebook:  'https://www.facebook.com/watch?v=...'
+  const firebaseConfig = {
+    apiKey: "AIzaSyAWPZ6TvJtFZbhksY3pD57SFAYoJGUDyT0",
+    authDomain: "ammo-7ddd2.firebaseapp.com",
+    databaseURL: "https://ammo-7ddd2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "ammo-7ddd2",
+    storageBucket: "ammo-7ddd2.firebasestorage.app",
+    messagingSenderId: "232969804928",
+    appId: "1:232969804928:web:915eeac683fd59b874da65"
   };
-  document.getElementById('urlInput').placeholder = ph[p];
-  resetResult();
+
+  // Init Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Expose save & render handlers to global window context
+  window.saveToFirebaseHistory = function(title, url, thumbnail, platform) {
+    try {
+      const historyRef = ref(db, 'downloader_history');
+      const newLogRef = push(historyRef);
+      
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+      const formattedDate = new Date().toLocaleDateString('id-ID', options) + " WIB";
+
+      set(newLogRef, {
+        title: title || "Unknown Title",
+        url: url,
+        thumbnail: thumbnail || "",
+        platform: platform || "unknown",
+        timestamp: Date.now(),
+        dateStr: formattedDate
+      });
+    } catch (e) {
+      console.error("Firebase Log Error: ", e);
+    }
+  };
+
+  // Realtime listener history cloud
+  const historyRef = ref(db, 'downloader_history');
+  onValue(historyRef, (snapshot) => {
+    const container = document.getElementById('historyListContainer');
+    if (!container) return;
+    
+    if (!snapshot.exists()) {
+      container.innerHTML = `<div class="empty-history">NO CLOUD LOGS FOUND.</div>`;
+      return;
+    }
+
+    const data = snapshot.val();
+    // Convert object list to array and sort by descending timestamp
+    const sortedList = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+    
+    container.innerHTML = "";
+    sortedList.forEach(item => {
+      const itemEl = document.createElement('div');
+      itemEl.className = 'history-item';
+      
+      const thumbSrc = item.thumbnail || 'https://placehold.co/160x90/0d1a0d/39FF14?text=AMO+DL';
+      
+      itemEl.innerHTML = `
+        <img class="history-thumb" src="${thumbSrc}" alt="thumb">
+        <div class="history-info">
+          <div class="history-title">${esc(item.title)}</div>
+          <div class="history-date">[${item.platform.toUpperCase()}] • ${item.dateStr}</div>
+        </div>
+        <button class="history-action-btn" onclick="loadFromHistory('${esc(item.url)}')">INJECT</button>
+      `;
+      container.appendChild(itemEl);
+    });
+  });
+</script>
+
+<script>
+// ── Global Variables ──
+let currentMediaData = null;
+let selectedFormat = null;
+
+function switchPanel(panelName) {
+  document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  
+  if(panelName === 'downloader') {
+    document.querySelector("button[onclick=\"switchPanel('downloader')\"]").classList.add('active');
+    document.getElementById('panel-downloader').classList.add('active');
+  } else {
+    document.querySelector("button[onclick=\"switchPanel('history')\"]").classList.add('active');
+    document.getElementById('panel-history').classList.add('active');
+  }
 }
 
-function resetResult() {
-  document.getElementById('resultCard').classList.remove('show');
-  document.getElementById('errorBox').classList.remove('show');
-  selectedFmt = null; selectedQual = null; currentInfo = null;
+function handlePaste() {
+  navigator.clipboard.readText().then(text => {
+    document.getElementById('urlInput').value = text;
+  }).catch(() => {
+    showError("Gagal membaca clipboard. Silakan paste manual bray.");
+  });
 }
 
-// ── Paste ─────────────────────────────────────────────────
-async function pasteURL() {
-  try {
-    const t = await navigator.clipboard.readText();
-    document.getElementById('urlInput').value = t;
-    autoDetect(t);
-  } catch { document.getElementById('urlInput').focus(); }
+function loadFromHistory(url) {
+  document.getElementById('urlInput').value = url;
+  switchPanel('downloader');
+  fetchMediaInfo();
 }
 
-function autoDetect(url) {
-  if (url.includes('youtube.com') || url.includes('youtu.be')) setTab('youtube');
-  else if (url.includes('instagram.com')) setTab('instagram');
-  else if (url.includes('facebook.com') || url.includes('fb.watch')) setTab('facebook');
-}
-
-// ── Fetch Info ────────────────────────────────────────────
-async function fetchMedia() {
+async function fetchMediaInfo() {
   const url = document.getElementById('urlInput').value.trim();
-  if (!url) { showError('⚠ Masukkan URL dulu bray!'); return; }
+  if (!url) return showError("⚠️ URL tidak boleh kosong bray!");
 
-  autoDetect(url);
   setLoading(true);
-  resetResult();
+  hideError();
+  document.getElementById('resultCard').classList.remove('show');
+  document.getElementById('previewContainer').innerHTML = `<span style="color: var(--muted); font-size: 11px; font-family: 'Share Tech Mono';">Select format to render live stream...</span>`;
 
   try {
-    const res = await fetch(`${BASE_URL}/api/info?url=${encodeURIComponent(url)}`);
+    const res = await fetch(`/api/info?url=${encodeURIComponent(url)}`);
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Gagal fetch info');
-    currentInfo = data;
-    renderResult(data);
+
+    if (!res.ok) throw new Error(data.error || "Gagal mengambil data media.");
+
+    currentMediaData = data;
+    renderResultCard(data);
+    
+    // Kirim Log Logika ke Firebase
+    if(window.saveToFirebaseHistory) {
+      window.saveToFirebaseHistory(data.title, data.webpage_url || url, data.thumbnail, data.platform);
+    }
+
   } catch (err) {
-    showError('❌ ' + err.message);
+    showError("❌ " + err.message);
   } finally {
     setLoading(false);
   }
 }
 
-// ── Render ────────────────────────────────────────────────
-function renderResult(info) {
-  const isImg = info.type === 'image';
+function renderResultCard(data) {
+  document.getElementById('metaTitle').textContent = data.title;
+  document.getElementById('metaPlatform').textContent = data.platform || "UNKNOWN";
+  
+  const img = document.getElementById('metaThumb');
+  img.src = data.thumbnail || '';
+  
+  const grid = document.getElementById('fmtGrid');
+  grid.innerHTML = "";
 
-  // Header
-  const hdr = document.getElementById('mediaHeader');
-  const thumbSrc = info.thumbnail || `https://placehold.co/130x73/0f1a0f/39FF14?text=${info.platform.toUpperCase()}`;
+  if (!data.formats || data.formats.length === 0) {
+    grid.innerHTML = `<span style="color: var(--neon3)">Format tidak tersedia.</span>`;
+    return;
+  }
 
-  hdr.innerHTML = `
-    <div class="thumb-wrap ${isImg ? 'is-image' : ''}">
-      <img src="${esc(thumbSrc)}" onerror="this.src='https://placehold.co/130x73/0f1a0f/39FF14?text=${info.platform.toUpperCase()}'" alt="thumb"/>
-    </div>
-    <div class="media-meta">
-      <div class="meta-platform">// ${esc(info.platform)} · ${esc(info.type)}</div>
-      <div class="meta-title">${esc(info.title)}</div>
-      <div class="meta-chips">
-        <span class="chip">👤 ${esc(info.uploader)}</span>
-        ${info.duration ? `<span class="chip">⏱ ${esc(info.duration)}</span>` : ''}
-        ${info.views    ? `<span class="chip">👁 ${esc(info.views)}</span>` : ''}
-      </div>
-    </div>
-  `;
+  // Render formats list
+  data.formats.forEach((fmt, idx) => {
+    const card = document.createElement('div');
+    card.className = `fmt-card ${idx === 0 ? 'sel' : ''}`;
+    
+    let icon = "🎬";
+    let label = "Video HD";
+    if (fmt === 'mp3') { icon = "🎵"; label = "Audio MP3"; }
+    else if (fmt === 'video_sd') { icon = "🎞️"; label = "Video SD"; }
+    else if (fmt.includes('image')) { icon = "🖼️"; label = "Gambar"; }
 
-  // Formats
-  renderFormats(info.formats);
+    card.innerHTML = `
+      <div class="fi">${icon}</div>
+      <div class="fb">${fmt.toUpperCase()}</div>
+      <div class="fd">${label}</div>
+    `;
+    
+    card.onclick = () => selectFormat(fmt, card);
+    grid.appendChild(card);
+    
+    if (idx === 0) {
+      selectFormat(fmt, card);
+    }
+  });
 
   document.getElementById('resultCard').classList.add('show');
 }
 
-function renderFormats(fmts) {
-  const DEFS = {
-    video_hd:  { icon: '🎬', label: 'Video',  badge: 'HD',    desc: '720p-1080p' },
-    video_sd:  { icon: '📹', label: 'Video',  badge: 'SD',    desc: '360p-480p' },
-    mp3:       { icon: '🎵', label: 'MP3',    badge: 'AUDIO', desc: '128-320kbps' },
-    image_jpg: { icon: '🖼', label: 'JPEG',   badge: 'IMG',   desc: 'Original' },
-    image_png: { icon: '📸', label: 'PNG',    badge: 'IMG',   desc: 'Lossless' }
-  };
-
-  const grid = document.getElementById('fmtGrid');
-  grid.innerHTML = '';
-
-  fmts.forEach(f => {
-    const d = DEFS[f] || { icon: '📁', label: f, badge: 'FILE', desc: '' };
-    const el = document.createElement('div');
-    el.className = 'fmt-card';
-    el.dataset.fmt = f;
-    el.innerHTML = `<span class="fi">${d.icon}</span><span>${d.label}</span><span class="fb">${d.badge}</span><span class="fd">${d.desc}</span>`;
-    el.onclick = () => selectFmt(f, el);
-    grid.appendChild(el);
-  });
-
-  // Auto-select first
-  grid.querySelector('.fmt-card')?.click();
-}
-
-function selectFmt(fmt, el) {
-  selectedFmt = fmt;
-  selectedQual = null;
-  document.querySelectorAll('.fmt-card').forEach(e => e.classList.remove('sel'));
-  el.classList.add('sel');
-
-  const qs = document.getElementById('qualSection');
-  const qr = document.getElementById('qualRow');
-
-  const QUALS = {
-    video_hd: [['1080p','Full HD'], ['720p','HD']],
-    video_sd: [['480p','SD'], ['360p','Low']],
-    mp3:      [['320kbps','High Quality'], ['128kbps','Standard']],
-  };
-
-  if (QUALS[fmt]) {
-    qs.style.display = 'block';
-    qr.innerHTML = QUALS[fmt].map(([v, d]) =>
-      `<div class="qual-btn" onclick="selectQual('${v}',this)">
-         <span class="qual-main">${v}</span>
-         <span class="qual-sub">${d}</span>
-       </div>`
-    ).join('');
-    qr.querySelector('.qual-btn').click();
-  } else {
-    qs.style.display = 'none';
+async function selectFormat(fmt, cardEl) {
+  selectedFormat = fmt;
+  document.querySelectorAll('.fmt-card').forEach(c => c.classList.remove('sel'));
+  cardEl.classList.add('sel');
+  
+  const previewBox = document.getElementById('previewContainer');
+  previewBox.innerHTML = `<span style="color: var(--neon2); font-size: 11px; font-family: 'Share Tech Mono';">⏳ GENERATING PREVIEW CONFIG...</span>`;
+  
+  // Tembak server untuk dapetin direct url buat di-preview
+  try {
+    const targetUrl = document.getElementById('urlInput').value.trim();
+    const res = await fetch(`/api/download?url=${encodeURIComponent(targetUrl)}&format=${fmt}`);
+    const streamData = await res.json();
+    
+    if(!res.ok || !streamData.url) {
+      previewBox.innerHTML = `<span style="color: var(--muted); font-size: 11px; font-family: 'Share Tech Mono';">⚠️ Preview unavailable for this resolution, direct download still works.</span>`;
+      return;
+    }
+    
+    // Render media base on stream format
+    if (fmt === 'mp3') {
+      previewBox.innerHTML = `<audio controls src="${streamData.url}" preload="metadata"></audio>`;
+    } else if (fmt.includes('image')) {
+      previewBox.innerHTML = `<img src="${streamData.url}" alt="Preview Image">`;
+    } else {
+      previewBox.innerHTML = `<video controls src="${streamData.url}" preload="metadata" playsinline></video>`;
+    }
+  } catch(e) {
+    previewBox.innerHTML = `<span style="color: var(--muted); font-size: 11px; font-family: 'Share Tech Mono';">⚠️ Connection limit, skip streaming module.</span>`;
   }
 }
 
-function selectQual(q, el) {
-  selectedQual = q;
-  document.querySelectorAll('.qual-btn').forEach(e => e.classList.remove('sel'));
-  el.classList.add('sel');
-}
+async function triggerDownload() {
+  if (!currentMediaData || !selectedFormat) return;
 
-// ── Download ──────────────────────────────────────────────
-async function startDownload() {
-  if (!selectedFmt) { showError('⚠ Pilih format dulu!'); return; }
-
-  const url  = document.getElementById('urlInput').value.trim();
-  const btn  = document.getElementById('dlBtn');
-  const prog = document.getElementById('progressEl');
-  const fill = document.getElementById('progFill');
-  const ptxt = document.getElementById('progTxt');
-
+  const btn = document.getElementById('dlBtn');
+  const originText = btn.innerHTML;
   btn.disabled = true;
-  btn.textContent = '⏳ GETTING LINK...';
-  prog.classList.add('show');
-
-  // Fake progress while fetching
-  let pct = 0;
-  const iv = setInterval(() => {
-    pct = Math.min(pct + Math.random() * 12, 88);
-    fill.style.width = pct + '%';
-    ptxt.textContent = Math.floor(pct) + '%';
-  }, 250);
+  btn.innerHTML = '⏳ GENERATING DIRECT BLOB LINK...';
 
   try {
-    const params = new URLSearchParams({ url, format: selectedFmt });
-    if (selectedQual) params.set('quality', selectedQual);
-
-    const res  = await fetch(`${BASE_URL}/api/download?${params}`);
+    const url = document.getElementById('urlInput').value.trim();
+    const res = await fetch(`/api/download?url=${encodeURIComponent(url)}&format=${selectedFormat}`);
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Download gagal');
 
-    clearInterval(iv);
-    fill.style.width = '100%';
-    ptxt.textContent = '100% — SIAP!';
-    btn.textContent = '✓ OPENING...';
+    if (!res.ok) throw new Error(data.error || "Gagal memproses file download.");
 
-    // Trigger download
-    setTimeout(() => {
-      const a = document.createElement('a');
-      a.href     = data.url;
-      a.download = data.filename || 'download';
-      a.target   = '_blank';
-      a.rel      = 'noopener noreferrer';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
-      btn.disabled   = false;
-      btn.innerHTML  = '↓ &nbsp;DOWNLOAD NOW';
-      prog.classList.remove('show');
-      fill.style.width = '0%';
-    }, 700);
+    // Direct Anchor deployment method bray
+    const a = document.createElement('a');
+    a.href = data.url;
+    a.download = data.filename || 'download';
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 
   } catch (err) {
-    clearInterval(iv);
-    prog.classList.remove('show');
-    btn.disabled  = false;
-    btn.innerHTML = '↓ &nbsp;DOWNLOAD NOW';
-    showError('❌ ' + err.message);
+    showError('❌ Download Gagal: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originText;
   }
 }
 
-// ── Helpers ───────────────────────────────────────────────
 function setLoading(show) {
   document.getElementById('loadingEl').classList.toggle('show', show);
   const btn = document.getElementById('fetchBtn');
-  btn.disabled    = show;
+  btn.disabled = show;
   btn.textContent = show ? '⏳ SCANNING...' : '⚡ ANALYZE URL';
 }
 
@@ -871,19 +630,15 @@ function showError(msg) {
   const b = document.getElementById('errorBox');
   b.textContent = msg;
   b.classList.add('show');
-  setTimeout(() => b.classList.remove('show'), 6000);
+}
+
+function hideError() {
+  document.getElementById('errorBox').classList.remove('show');
 }
 
 function esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
-// Enter key
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('urlInput').addEventListener('keydown', e => {
-    if (e.key === 'Enter') fetchMedia();
-  });
-});
 </script>
 </body>
 </html>
