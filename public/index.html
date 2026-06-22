@@ -28,14 +28,13 @@
   /* ── AMOGENZ DESIGN SYSTEM SPEC v1.0.0 PASTING CORE ── */
   @font-face {
     font-family: 'BerlinSansFB';
-    /* Menggunakan jsDelivr sebagai CDN gratis dari GitHub kamu */
     src: url('https://cdn.jsdelivr.net/gh/amogenz/Amogenz/fonts/BerlinSansFBDemi-Bold.woff2') format('woff2'),
          url('https://cdn.jsdelivr.net/gh/amogenz/Amogenz/fonts/BerlinSansFBDemi-Bold.woff') format('woff'),
          url('https://cdn.jsdelivr.net/gh/amogenz/Amogenz/fonts/BerlinSansFB.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
-}
+  }
 
   :root {
     /* === COLORS === */
@@ -259,7 +258,7 @@
     margin-bottom: 8px; display: block;
   }
 
-  /* ── Form Inputs Responsive Stack bray ── */
+  /* ── Form Inputs Responsive Stack ── */
   .form-input-row {
     display: flex; 
     flex-direction: column;
@@ -354,7 +353,6 @@
     word-break: break-word;
   }
 
-  /* Grid auto-fit anti luber HP bray */
   .grid-specification-scale {
     display: grid; 
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -437,7 +435,7 @@
   }
   .native-video-playback-window.show { display: block; }
 
-  /* Verified Badge */
+  /* Verified Badge Token System */
   .verified-badge-amogenz {
     background-color: var(--color-verified-bg); color: var(--color-verified-text);
     font-family: var(--font-ui); font-size: 9px; font-weight: 700;
@@ -446,7 +444,7 @@
     vertical-align: middle; flex-shrink: 0;
   }
 
-  /* History Log Rows Wrappers */
+  /* History Log Rows */
   .history-vertical-stack { display: flex; flex-direction: column; gap: 12px; }
   .history-log-row-card {
     background: var(--color-bg-surface); border: 1px solid var(--color-border-default);
@@ -465,7 +463,23 @@
     width: auto; height: 32px; padding: 0 12px; font-size: 12px; flex-shrink: 0;
   }
 
-  /* Base Loader */
+  /* Counter Badge Badge di Tab Riwayat bray */
+  .history-counter-badge {
+    display: inline-block;
+    background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-default);
+    color: var(--color-text-accent);
+    font-family: var(--font-mono);
+    font-size: var(--type-label-sm);
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-xs);
+    margin-bottom: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* Base Loader Output */
   .loader-wrapper-block { display: none; text-align: center; padding: 32px; }
   .amogenz-spinner {
     width: 36px; height: 36px;
@@ -534,7 +548,7 @@
             <label class="ui-label-spec">Cyber Equalizer Datastream Channel</label>
             <div class="cyberplayer-container-box">
               <audio id="hiddenAudioPlayer" style="display:none;"></audio>
-              <div id="previewStatus" style="font-family: var(--font-mono); font-size: var(--type-caption); color: var(--color-text-muted);">Awaiting format specification mapping selection...</div>
+              <div id="previewStatus" style="font-family: var(--font-mono); font-size: var(--type-caption); color: var(--text-muted);">Awaiting format specification mapping selection...</div>
               
               <div class="cyber-player" id="cyberPlayerUI">
                 <div class="cyberplayer-interface-deck" id="playerInterfaceDeckRow">
@@ -570,8 +584,10 @@
       </div>
     </div>
 
+    <!-- Panel Riwayat dengan Sistem Penghitung Item Realtime bray -->
     <div id="panel-history" class="panel-section panel">
       <div class="amogenz-card">
+        <div id="historyCounterElement" class="history-counter-badge">TOTAL RECORDED PIPELINES: 0 ITEMS</div>
         <div class="history-vertical-stack" id="historyListContainer">
           <div style="text-align:center; font-family: var(--font-mono); color: var(--color-text-muted); padding:40px 0;">SYNCING REMOTE STORAGE PACKETS MODULE...</div>
         </div>
@@ -579,8 +595,7 @@
     </div>
 
     <footer>
-      <p>AMOGENZ SPEC · &copy; 2026 <br>By • Ibrahim Studio</p>
-
+      <p>AMOGENZ SPEC · &copy; 2026 <br>by Ibrahim Studio</p>
     </footer>
   </div>
 
@@ -630,13 +645,21 @@
   const historyRef = ref(db, 'downloader_history');
   onValue(historyRef, (snapshot) => {
     const container = document.getElementById('historyListContainer');
+    const counterEl = document.getElementById('historyCounterElement');
     if (!container) return;
     if (!snapshot.exists()) {
       container.innerHTML = `<div style="text-align:center; font-family: var(--font-mono); color: var(--color-text-muted); padding:40px 0;">NO DATABASE ALLOCATIONS REGISTERED IN CLOUD SURFACES.</div>`;
+      if (counterEl) counterEl.textContent = "TOTAL RECORDED PIPELINES: 0 ITEMS";
       return;
     }
     const data = snapshot.val();
     const sortedList = Object.values(data).sort((a, b) => b.timestamp - a.timestamp);
+    
+    // Perbarui jumlah total baris database riwayat secara realtime bray
+    if (counterEl) {
+      counterEl.textContent = `TOTAL RECORDED PIPELINES: ${sortedList.length} ITEMS`;
+    }
+
     container.innerHTML = "";
     sortedList.forEach(item => {
       const itemEl = document.createElement('div');
